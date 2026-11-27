@@ -4,6 +4,8 @@ const form = document.getElementById("task-form");
 const input = document.getElementById("task-input");
 const list = document.getElementById("task-list");
 const emptyState = document.getElementById("empty-state");
+const listFooter = document.getElementById("list-footer");
+const clearCompletedBtn = document.getElementById("clear-completed");
 
 let tasks = loadTasks();
 
@@ -52,6 +54,8 @@ function render() {
   }
 
   emptyState.hidden = tasks.length > 0;
+  listFooter.hidden = tasks.length === 0;
+  clearCompletedBtn.disabled = !tasks.some((t) => t.done);
 }
 
 function addTask(text) {
@@ -74,6 +78,20 @@ function deleteTask(id) {
   saveTasks();
   render();
 }
+
+function clearCompleted() {
+  const doneCount = tasks.filter((t) => t.done).length;
+  if (doneCount === 0) return;
+
+  const label = doneCount === 1 ? "1 completed task" : `${doneCount} completed tasks`;
+  if (!confirm(`Delete ${label}? This can't be undone.`)) return;
+
+  tasks = tasks.filter((t) => !t.done);
+  saveTasks();
+  render();
+}
+
+clearCompletedBtn.addEventListener("click", clearCompleted);
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
