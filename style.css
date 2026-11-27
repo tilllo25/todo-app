@@ -21,6 +21,8 @@
   --danger-hover-bg: #fdecea;
   --subtle-hover-bg: #f4f5f7;
   --secondary-text: #555;
+  --urgency-today: #c0392b;
+  --urgency-tomorrow: #b9770e;
 }
 
 /* Dark colours: used when the user picks dark, or when they haven't picked
@@ -42,6 +44,8 @@
   --danger-hover-bg: #3a2224;
   --subtle-hover-bg: #2a2e34;
   --secondary-text: #b5b9bf;
+  --urgency-today: #f07167;
+  --urgency-tomorrow: #f0b45a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,6 +66,8 @@
     --danger-hover-bg: #3a2224;
     --subtle-hover-bg: #2a2e34;
     --secondary-text: #b5b9bf;
+    --urgency-today: #f07167;
+    --urgency-tomorrow: #f0b45a;
   }
 }
 
@@ -189,6 +195,41 @@ button {
 .task-item.done .task-text {
   text-decoration: line-through;
   color: var(--text-done);
+}
+
+.urgency-select {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.urgency-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.urgency-select.urgency-today {
+  border-color: var(--urgency-today);
+  color: var(--urgency-today);
+}
+
+.urgency-select.urgency-tomorrow {
+  border-color: var(--urgency-tomorrow);
+  color: var(--urgency-tomorrow);
+}
+
+.urgency-select.urgency-next-week {
+  color: var(--text-muted);
+}
+
+.task-item.done .urgency-select {
+  opacity: 0.5;
 }
 
 .delete-btn {

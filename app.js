@@ -1,5 +1,12 @@
 const STORAGE_KEY = "todo-app-tasks";
 
+const URGENCY_LABELS = {
+  today: "Today",
+  tomorrow: "Tomorrow",
+  "next-week": "Next week",
+};
+const DEFAULT_URGENCY = "today";
+
 const form = document.getElementById("task-form");
 const input = document.getElementById("task-input");
 const list = document.getElementById("task-list");
@@ -44,13 +51,25 @@ function render() {
     text.className = "task-text";
     text.textContent = task.text;
 
+    const urgency = document.createElement("select");
+    urgency.className = "urgency-select urgency-" + getUrgency(task);
+    urgency.setAttribute("aria-label", "How urgent is this task?");
+    for (const [value, label] of Object.entries(URGENCY_LABELS)) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      urgency.appendChild(option);
+    }
+    urgency.value = getUrgency(task);
+    urgency.addEventListener("change", () => setUrgency(task.id, urgency.value));
+
     const del = document.createElement("button");
     del.className = "delete-btn";
     del.textContent = "Delete";
     del.setAttribute("aria-label", "Delete task");
     del.addEventListener("click", () => deleteTask(task.id));
 
-    li.append(checkbox, text, del);
+    li.append(checkbox, text, urgency, del);
     list.appendChild(li);
   }
 
@@ -64,9 +83,28 @@ function render() {
 }
 
 function addTask(text) {
-  tasks.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2), text, done: false });
+  tasks.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+    text,
+    done: false,
+    urgency: DEFAULT_URGENCY,
+  });
   saveTasks();
   render();
+}
+
+// Tasks saved before this feature existed have no urgency yet.
+function getUrgency(task) {
+  return task.urgency in URGENCY_LABELS ? task.urgency : DEFAULT_URGENCY;
+}
+
+function setUrgency(id, urgency) {
+  const task = tasks.find((t) => t.id === id);
+  if (task && urgency in URGENCY_LABELS) {
+    task.urgency = urgency;
+    saveTasks();
+    render();
+  }
 }
 
 function toggleTask(id) {
