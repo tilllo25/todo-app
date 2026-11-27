@@ -5,6 +5,7 @@ const input = document.getElementById("task-input");
 const list = document.getElementById("task-list");
 const emptyState = document.getElementById("empty-state");
 const listFooter = document.getElementById("list-footer");
+const taskCount = document.getElementById("task-count");
 const clearCompletedBtn = document.getElementById("clear-completed");
 
 let tasks = loadTasks();
@@ -56,6 +57,10 @@ function render() {
   emptyState.hidden = tasks.length > 0;
   listFooter.hidden = tasks.length === 0;
   clearCompletedBtn.disabled = !tasks.some((t) => t.done);
+
+  const openCount = tasks.filter((t) => !t.done).length;
+  taskCount.textContent =
+    openCount === 0 ? "All done! 🎉" : openCount === 1 ? "1 task left" : `${openCount} tasks left`;
 }
 
 function addTask(text) {
