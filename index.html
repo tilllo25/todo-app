@@ -5,10 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Till's To Do App</title>
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply the saved theme before the page draws, so it doesn't flash light first.
+    try {
+      const savedTheme = localStorage.getItem("todo-app-theme");
+      if (savedTheme === "light" || savedTheme === "dark") {
+        document.documentElement.dataset.theme = savedTheme;
+      }
+    } catch {}
+  </script>
 </head>
 <body>
   <main class="app">
-    <h1>Till's To Do App</h1>
+    <header class="app-header">
+      <h1>Till's To Do App</h1>
+      <button id="theme-toggle" type="button" class="theme-toggle"></button>
+    </header>
 
     <form id="task-form" class="task-form">
       <input

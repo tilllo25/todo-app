@@ -102,4 +102,38 @@ form.addEventListener("submit", (event) => {
   input.focus();
 });
 
+// ---------- Dark mode ----------
+
+const THEME_KEY = "todo-app-theme";
+const themeToggle = document.getElementById("theme-toggle");
+const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+function currentTheme() {
+  const chosen = document.documentElement.dataset.theme;
+  if (chosen === "light" || chosen === "dark") return chosen;
+  return systemDark.matches ? "dark" : "light";
+}
+
+function updateThemeToggle() {
+  const isDark = currentTheme() === "dark";
+  themeToggle.textContent = isDark ? "☀️" : "🌙";
+  themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+  themeToggle.title = isDark ? "Light mode" : "Dark mode";
+}
+
+themeToggle.addEventListener("click", () => {
+  const next = currentTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try {
+    localStorage.setItem(THEME_KEY, next);
+  } catch {
+    // Storage unavailable; the theme still applies until the page is closed.
+  }
+  updateThemeToggle();
+});
+
+// If no theme has been picked, follow system changes live.
+systemDark.addEventListener("change", updateThemeToggle);
+
+updateThemeToggle();
 render();

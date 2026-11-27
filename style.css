@@ -2,30 +2,126 @@
   box-sizing: border-box;
 }
 
+/* ---------- Colour themes ---------- */
+
+:root {
+  color-scheme: light;
+  --page-bg: #f4f5f7;
+  --card-bg: #fff;
+  --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --text: #222;
+  --text-muted: #888;
+  --text-done: #999;
+  --border: #ccc;
+  --divider: #eee;
+  --input-bg: #fff;
+  --accent: #2e9e4f;
+  --accent-hover: #24843f;
+  --danger: #c0392b;
+  --danger-hover-bg: #fdecea;
+  --subtle-hover-bg: #f4f5f7;
+  --secondary-text: #555;
+}
+
+/* Dark colours: used when the user picks dark, or when they haven't picked
+   and their system is set to dark. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #121417;
+  --card-bg: #1e2126;
+  --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  --text: #e8e9eb;
+  --text-muted: #8b9098;
+  --text-done: #6b7078;
+  --border: #3a3f47;
+  --divider: #2c3036;
+  --input-bg: #16181c;
+  --accent: #34b35a;
+  --accent-hover: #2e9e4f;
+  --danger: #f07167;
+  --danger-hover-bg: #3a2224;
+  --subtle-hover-bg: #2a2e34;
+  --secondary-text: #b5b9bf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page-bg: #121417;
+    --card-bg: #1e2126;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    --text: #e8e9eb;
+    --text-muted: #8b9098;
+    --text-done: #6b7078;
+    --border: #3a3f47;
+    --divider: #2c3036;
+    --input-bg: #16181c;
+    --accent: #34b35a;
+    --accent-hover: #2e9e4f;
+    --danger: #f07167;
+    --danger-hover-bg: #3a2224;
+    --subtle-hover-bg: #2a2e34;
+    --secondary-text: #b5b9bf;
+  }
+}
+
+/* ---------- Layout ---------- */
+
 body {
   margin: 0;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f4f5f7;
-  color: #222;
+  background: var(--page-bg);
+  color: var(--text);
   display: flex;
   justify-content: center;
   padding: 48px 16px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .app {
   width: 100%;
   max-width: 480px;
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--card-shadow);
   align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 h1 {
-  margin: 0 0 20px;
+  margin: 0;
   font-size: 1.75rem;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+}
+
+.theme-toggle {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.theme-toggle:hover {
+  background: var(--subtle-hover-bg);
 }
 
 .task-form {
@@ -36,32 +132,28 @@ h1 {
 
 .task-form input {
   flex: 1;
+  min-width: 0;
   padding: 10px 12px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
   border-radius: 8px;
 }
 
 .task-form input:focus {
   outline: none;
-  border-color: #2e9e4f;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
+  border-color: var(--accent);
 }
 
 .task-form button {
   padding: 10px 18px;
-  background: #2e9e4f;
+  background: var(--accent);
   color: #fff;
 }
 
 .task-form button:hover {
-  background: #24843f;
+  background: var(--accent-hover);
 }
 
 .task-list {
@@ -75,7 +167,7 @@ button {
   align-items: center;
   gap: 12px;
   padding: 10px 4px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--divider);
 }
 
 .task-item:last-child {
@@ -86,6 +178,7 @@ button {
   width: 18px;
   height: 18px;
   cursor: pointer;
+  accent-color: var(--accent);
 }
 
 .task-text {
@@ -95,22 +188,22 @@ button {
 
 .task-item.done .task-text {
   text-decoration: line-through;
-  color: #999;
+  color: var(--text-done);
 }
 
 .delete-btn {
   background: transparent;
-  color: #c0392b;
+  color: var(--danger);
   padding: 4px 8px;
   font-size: 0.9rem;
 }
 
 .delete-btn:hover {
-  background: #fdecea;
+  background: var(--danger-hover-bg);
 }
 
 .empty-state {
-  color: #888;
+  color: var(--text-muted);
   text-align: center;
   margin: 8px 0 0;
 }
@@ -124,7 +217,7 @@ button {
   justify-content: flex-end;
   margin-top: 16px;
   padding-top: 12px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--divider);
 }
 
 .list-footer[hidden] {
@@ -133,15 +226,15 @@ button {
 
 .clear-btn {
   background: transparent;
-  color: #555;
+  color: var(--secondary-text);
   padding: 6px 12px;
   font-size: 0.9rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border);
 }
 
 .clear-btn:hover:not(:disabled) {
-  background: #f4f5f7;
-  color: #222;
+  background: var(--subtle-hover-bg);
+  color: var(--text);
 }
 
 .clear-btn:disabled {
